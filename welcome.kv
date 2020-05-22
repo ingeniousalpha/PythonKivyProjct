@@ -1,0 +1,135 @@
+#: import ListAdapter  kivy.adapters.listadapter.ListAdapter
+#: import MDFlatButton kivymd.button.MDFlatButton
+#: import MDProgressBar kivymd.progressbar.MDProgressBar
+#: import main welcomegan
+
+
+<DownloadableAsyncImage>:
+    size_hint: 1, 1
+
+
+<MyButton>:
+    size: (100, '40dp')
+    font_size: 16
+    background_normal: ''
+    selected_color: [ .13, .59, .95, 1]
+    deselected_color: [ .28, .28, .28, 1]
+
+
+<FileMan>:
+    size_hint: 1, 1
+    id: fileman
+    on_selection:
+        self.image_selected()
+
+
+<InputScreen>:
+    name: 'input_screen'
+
+    top_section: top_section
+    middle_section: middle_section
+    bottom_section: bottom_section
+    inner_top_section: inner_top_section
+
+    style_list: style_list_view
+    choose_img_btn: open_file
+    generate_btn: generate_btn
+
+    AnchorLayout:
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint: .9, .9
+            spacing: '30sp'
+
+            AnchorLayout:
+                id: top_section
+                anchor_y: 'center'
+                anchor_x: 'center'
+
+                AnchorLayout:
+                    size_hint: 1, 1
+                    id: inner_top_section
+
+                    MDFlatButton:
+                        id: open_file
+                        text: 'Choose a Picture'
+                        size_hint: 1, 1
+                        on_release:
+                            root.select_image(1)
+
+            ScrollView:
+                do_scroll_x: False
+
+                AnchorLayout:
+                    id: middle_section
+                    anchor_x: 'center'
+                    anchor_y: 'bottom'
+
+                    ListView:
+                        size_hint: 1, .7
+                        id: style_list_view
+                        adapter:
+                            ListAdapter(data=['Van Gogh', 'Joan Miro', 'Leonardo da Vinci',
+                            'Pablo Picasso', 'Katsushika Hokusai',
+                            'Ivan Aivazovsky', 'Michelangelo',
+                            'Shishkin & Savitsky', 'Claude Monet',
+                            'Salvador Dali', 'Sandro Botticelli'],
+                            cls=main.MyButton)
+
+            AnchorLayout:
+                id: bottom_section
+                anchor_x: 'center'
+                anchor_y: 'bottom'
+                size_hint: 1, .2
+
+                MDRaisedButton:
+                    id: generate_btn
+                    text: 'Generate'
+                    size_hint: 0.6, 1
+                    on_release:
+                        root.select_style()
+
+
+<OutputScreen>:
+    name: 'output_screen'
+    input_img: input
+    styled_img: output
+    progressbar: progressbar
+    nextgen_btn: nextgen_btn
+
+    AnchorLayout:
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint: .9, .9
+
+            AnchorLayout:
+                size_hint: 1, 0.4
+                id: input
+                Image:
+                    source: ''
+
+            AnchorLayout:
+                size_hint: 1, 0.015
+                MDProgressBar:
+                    id: progressbar
+                    size_hint: self.parent.size[0]/2, 1
+                    max: 100
+
+            AnchorLayout:
+                size_hint: 1, 0.4
+                id: output
+
+            AnchorLayout:
+                size_hint: 1, 0.2
+                anchor_x: 'center'
+                anchor_y: 'bottom'
+
+                MDRaisedButton:
+                    id: nextgen_btn
+                    text: 'Next Gen'
+                    size_hint: 0.6, .4
+                    on_release:
+                        root.manager.get_screen('input_screen').select_image(2)
+                        root.manager.transition.direction = "right"
+                        root.manager.current = 'input_screen'
+
